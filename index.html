@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B7 Arcade Gaming</title>
+<style>
+:root {
+  --site-primary: #7657ff;
+  --site-on-primary: #ffffff;
+  --site-secondary: #14213a;
+  --site-on-secondary: #ffffff;
+  --site-background: #090d18;
+  --site-on-background: #f4f6ff;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  --panel: #11182a;
+  --muted: #a6b0c8;
+  --line: #29324a;
+  --green: #5be0ae;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+body { margin: 0; background: var(--site-background); color: var(--site-on-background); font-family: var(--site-font-body); }
+#app { min-height: 100vh; width: 100%; border-radius: 0; overflow: hidden; background: var(--site-background); color: var(--site-on-background); position: relative; }
+.top-glow { position: absolute; width: 520px; height: 520px; border-radius: 50%; filter: blur(100px); opacity: calc(.18 * var(--site-decoration-opacity)); pointer-events: none; background: var(--site-primary); top: -290px; left: 42%; }
+header { position: relative; z-index: 1; display:flex; align-items:center; justify-content:space-between; padding: calc(22px * var(--site-spacing-scale)) clamp(18px, 5vw, 72px); border-bottom: 1px solid var(--line); }
+.brand { display:flex; gap:11px; align-items:center; font-weight:850; letter-spacing:-.04em; font-size:20px; }
+.brand-mark { width:35px; height:35px; border-radius: calc(11px * var(--site-radius-scale)); display:grid; place-items:center; color:white; background:linear-gradient(135deg,var(--site-primary),#ad72ff); box-shadow:0 6px 24px #7657ff45; }
+.brand-mark svg { width:20px; height:20px; }
+.nav { display:flex; align-items:center; gap:24px; color:var(--muted); font-size:13px; }
+.nav a { color:inherit; text-decoration:none; }
+.nav a:hover { color:var(--site-on-background); }
+.pill { border:1px solid var(--line); border-radius:999px; padding:8px 12px; color:var(--green); font-size:12px; display:flex; align-items:center; gap:8px; }
+.dot { width:7px; height:7px; background:var(--green); border-radius:50%; box-shadow:0 0 12px #5be0ae88; }
+main { max-width:1180px; margin:auto; padding:54px 22px 72px; position:relative; z-index:1; }
+.hero { display:grid; grid-template-columns:1.05fr .95fr; align-items:center; gap:45px; }
+.eyebrow { color:#b7aaff; text-transform:uppercase; letter-spacing:.17em; font-size:11px; font-weight:800; display:flex; gap:9px; align-items:center; }
+.eyebrow:before { content:""; height:1px; width:25px; background:var(--site-primary); }
+h1 { font-family:var(--site-font-heading); font-size:clamp(40px,6vw,70px); line-height:1.02; letter-spacing:-.065em; margin:18px 0; font-weight:900; }
+h1 span { color:#a99aff; }
+.lead { color:var(--muted); font-size:16px; line-height:1.8; max-width:500px; }
+.actions { display:flex; gap:12px; flex-wrap:wrap; margin:28px 0 20px; }
+button { font:inherit; cursor:pointer; }
+.btn { border:1px solid transparent; border-radius:calc(13px * var(--site-radius-scale)); padding:13px 18px; font-weight:750; font-size:13px; display:inline-flex; align-items:center; justify-content:center; gap:9px; transition:transform .18s, filter .18s, border-color .18s; }
+.btn:hover { transform:translateY(-2px); filter:brightness(1.1); }
+.btn-primary { background:var(--site-primary); color:var(--site-on-primary); box-shadow:0 10px 26px #7657ff35; }
+.btn-quiet { background:#ffffff08; border-color:var(--line); color:var(--site-on-background); }
+.fine { font-size:11px; color:#818ba5; line-height:1.7; }
+.preview { border:1px solid #343b5a; border-radius:calc(25px * var(--site-radius-scale)); background:linear-gradient(150deg,#1b2340,#0d1324 75%); padding:17px; box-shadow:0 28px 90px #0005; position:relative; }
+.screen { min-height:285px; border-radius:calc(17px * var(--site-radius-scale)); overflow:hidden; position:relative; background:radial-gradient(ellipse at 50% 80%,#6e4bff 0%,transparent 45%),linear-gradient(145deg,#25385f,#101629 55%,#201744); display:flex; flex-direction:column; justify-content:space-between; padding:18px; }
+.screen:before,.screen:after { content:""; position:absolute; border:1px solid #ffffff18; border-radius:50%; width:260px;height:260px; left:50%;top:56%;transform:translate(-50%,-50%); }
+.screen:after { width:340px;height:340px; }
+.screen-top,.screen-bottom { position:relative; z-index:1; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.screen-tag { background:#080c1b9c; border:1px solid #ffffff20; border-radius:8px; padding:7px 10px; font-size:10px; color:#dbe1ff; }
+.game-art { position:absolute; inset:0; display:grid; place-items:center; }
+.game-cube { width:116px;height:116px; border-radius:26px; transform:rotate(-10deg); background:linear-gradient(145deg,#a99aff,#7657ff 55%,#4327b9); box-shadow:20px 25px 55px #050714aa,inset -12px -12px 20px #25136a55,inset 10px 10px 20px #ffffff45; display:grid; place-items:center; }
+.game-cube svg { width:55px;height:55px; filter:drop-shadow(0 5px 7px #301c8a66); }
+.preview-bottom { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:15px 3px 2px; }
+.preview-title { font-size:13px; font-weight:800; }
+.preview-sub { color:var(--muted); font-size:11px; margin-top:5px; }
+.tag { font-size:10px; color:#c8bfff; border:1px solid #554c87; border-radius:7px; padding:6px 8px; white-space:nowrap; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:45px 0 56px; }
+.stat { padding:17px; background:#ffffff05; border:1px solid var(--line); border-radius:calc(14px * var(--site-radius-scale)); }
+.stat strong { display:block; font-size:20px; letter-spacing:-.04em; }
+.stat span { display:block; color:var(--muted); font-size:11px; margin-top:6px; }
+.section-head { margin-bottom:22px; }
+.section-head h2 { font-size:clamp(25px,4vw,35px); letter-spacing:-.05em; margin:8px 0; }
+.section-head p { color:var(--muted); font-size:13px; line-height:1.7; margin:0; }
+.setup-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:calc(18px * var(--site-radius-scale)); padding:22px; }
+.panel h3 { margin:0 0 7px; font-size:16px; }
+.panel p { margin:0 0 18px; color:var(--muted); font-size:12px; line-height:1.7; }
+.option-row { display:flex; gap:10px; }
+.option { flex:1; min-height:86px; border:1px solid var(--line); border-radius:12px; background:#ffffff04; color:var(--site-on-background); padding:13px 10px; text-align:left; }
+.option.active { border-color:var(--site-primary); background:#7657ff1a; box-shadow:inset 0 0 0 1px #7657ff33; }
+.option .emoji { font-size:21px; display:block; margin-bottom:9px; }
+.option b { display:block; font-size:11px; }
+.option small { display:block; color:var(--muted); font-size:10px; margin-top:5px; }
+.status-line { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:11px; background:#ffffff05; border:1px solid var(--line); margin-top:14px; }
+.status-icon { flex:none; width:25px;height:25px;border-radius:8px;background:#7657ff25;color:#b7aaff;display:grid;place-items:center;font-size:13px; }
+.status-line b { display:block; font-size:11px; margin:1px 0 4px; }
+.status-line span { display:block; font-size:10px; color:var(--muted); line-height:1.6; }
+.note { margin-top:18px; padding:14px 15px; border-left:3px solid #e6b45b; background:#e6b45b10; color:#d9c9a7; font-size:11px; line-height:1.7; border-radius:0 9px 9px 0; }
+.faq { margin-top:56px; }
+details { border-bottom:1px solid var(--line); padding:16px 0; }
+summary { cursor:pointer; font-size:13px; font-weight:700; list-style:none; display:flex; justify-content:space-between; gap:12px; }
+summary:after { content:"+"; color:#b7aaff; font-size:17px; }
+details[open] summary:after { content:"−"; }
+details p { color:var(--muted); font-size:12px; line-height:1.8; margin:12px 0 0; max-width:800px; }
+footer { border-top:1px solid var(--line); padding:24px clamp(18px,5vw,72px); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; color:#7e89a4; font-size:10px; }
+#toast { position:fixed; z-index:10; bottom:20px; left:50%; transform:translate(-50%,20px); opacity:0; pointer-events:none; background:#f4f2ff; color:#17112e; border-radius:12px; padding:13px 17px; font-size:12px; font-weight:700; box-shadow:0 10px 35px #0007; max-width:calc(100vw - 32px); transition:.25s; }
+#toast.show { opacity:1; transform:translate(-50%,0); }
+@media(max-width:760px) { .nav a { display:none; } main { padding-top:38px; } .hero { grid-template-columns:1fr; gap:30px; } .preview { max-width:520px; width:100%; margin:auto; } .stats { margin:28px 0 42px; } .setup-grid { grid-template-columns:1fr; } .screen { min-height:240px; } }
+@media(max-width:420px) { .stats { gap:7px; } .stat { padding:12px 9px; } .stat strong { font-size:17px; } .stat span { font-size:10px; } .option-row { gap:7px; } .option { padding:10px 7px; } }
+@media(prefers-reduced-motion:reduce) { *,*:before,*:after { transition:none!important; } }
+
+.store-section { margin-top:58px; }
+.store-toolbar { display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin:20px 0; }
+.store-search { flex:1; min-width:190px; max-width:360px; background:var(--panel); color:var(--site-on-background); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font:inherit; outline:none; }
+.store-search:focus { border-color:var(--site-primary); }
+.store-filters { display:flex; gap:8px; flex-wrap:wrap; }
+.filter-btn { border:1px solid var(--line); border-radius:999px; padding:9px 12px; background:var(--panel); color:var(--muted); font-size:11px; font-weight:700; }
+.filter-btn.active { background:#7657ff25; color:#c9c0ff; border-color:var(--site-primary); }
+.game-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.game-card { min-width:0; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--panel); }
+.game-cover { min-height:125px; padding:16px; display:flex; align-items:flex-end; justify-content:space-between; position:relative; overflow:hidden; }
+.game-cover:before { content:""; position:absolute; width:150px; height:150px; border:1px solid #ffffff25; border-radius:50%; right:-28px; top:-50px; box-shadow:0 0 0 22px #ffffff06,0 0 0 44px #ffffff04; }
+.game-cover .game-emoji { font-size:42px; position:relative; filter:drop-shadow(0 8px 10px #0007); }
+.game-cover .game-type { position:relative; border:1px solid #ffffff40; background:#05081780; color:white; border-radius:8px; padding:6px 8px; font-size:9px; font-weight:800; letter-spacing:.06em; }
+.cover-roblox { background:linear-gradient(135deg,#28364e,#111827 65%,#596c8e); }
+.cover-minecraft { background:linear-gradient(135deg,#315f3b,#172d28 60%,#82a34b); }
+.cover-freefire { background:linear-gradient(135deg,#8a3a19,#341a28 65%,#e18c34); }
+.cover-cod { background:linear-gradient(135deg,#4d5b50,#202b2c 60%,#9a9c7d); }
+.cover-fortnite { background:linear-gradient(135deg,#3e43a2,#22204d 60%,#c15dce); }
+.cover-carx { background:linear-gradient(135deg,#144b63,#172139 60%,#db5a3d); }
+.game-info { padding:15px; }
+.game-info h3 { margin:0 0 6px; font-size:15px; }
+.game-info p { min-height:38px; margin:0 0 13px; color:var(--muted); font-size:11px; line-height:1.65; }
+.game-meta { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:13px; }
+.game-meta span { font-size:9px; border:1px solid var(--line); border-radius:6px; padding:5px 7px; color:#c5cce0; }
+.game-actions { display:flex; gap:8px; }
+.game-actions .btn { flex:1; padding:10px 8px; font-size:11px; }
+.btn-added { border-color:#397b66!important; color:#82e7c1!important; background:#2b9c7314!important; }
+.store-notice { padding:15px 16px; margin-top:18px; border:1px solid #6c5a2c; border-radius:12px; background:#e6b45b0c; color:#d8c9a8; font-size:11px; line-height:1.75; }
+.empty-state { display:none; padding:25px; border:1px dashed var(--line); border-radius:14px; color:var(--muted); text-align:center; }
+@media(max-width:760px) { .game-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:470px) { .game-grid { grid-template-columns:1fr; } .game-cover { min-height:105px; } .store-toolbar { align-items:stretch; } .store-search { max-width:none; } }
+
+
+/* Mobile-to-TV pairing prototype */
+.pair-section { margin-top:58px; }
+.pair-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.pair-code { font-size:clamp(28px,5vw,42px); font-weight:900; letter-spacing:.22em; text-align:center; padding:16px; border:1px dashed #7866d9; background:#7657ff13; border-radius:14px; margin:14px 0; }
+.qr-wrap { background:#fff; border-radius:16px; padding:12px; width:170px; height:170px; display:grid; place-items:center; margin:14px auto; }
+.qr-wrap img { width:100%; height:100%; object-fit:contain; }
+.pair-input { width:100%; border:1px solid var(--line); background:#0b1020; color:var(--site-on-background); border-radius:11px; padding:13px; font:inherit; margin:8px 0 12px; }
+.controller-pad { display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:center; margin-top:18px; }
+.dpad { display:grid; grid-template-columns:repeat(3,48px); grid-template-rows:repeat(3,48px); gap:5px; justify-content:center; }
+.pad-btn { border:1px solid #51478b; background:#242044; color:#fff; border-radius:12px; font-weight:800; min-width:0; touch-action:manipulation; }
+.pad-btn:active { background:var(--site-primary); transform:scale(.96); }
+.action-pad { display:grid; grid-template-columns:repeat(2,58px); gap:10px; justify-content:center; }
+.action-pad .pad-btn { height:58px; border-radius:50%; }
+@media(max-width:760px) { .pair-grid { grid-template-columns:1fr; } .controller-pad { gap:8px; } .dpad { grid-template-columns:repeat(3,42px); grid-template-rows:repeat(3,42px); } .action-pad { grid-template-columns:repeat(2,50px); } .action-pad .pad-btn { height:50px; } }
+
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top-glow" aria-hidden="true"></div>
+  <header>
+    <div class="brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v14H5z" stroke="currentColor" stroke-width="2" transform="rotate(12 12 12)"/><path d="m9 9 6 6m0-6-6 6" stroke="currentColor" stroke-width="2"/></svg></div>B7 Arcade Gaming</div>
+    <nav class="nav"><a href="#store">Game Store</a><a href="#setup">Input setup</a><a href="#mobile-controller">Mobile controller</a><a href="#how">How it works</a><a href="#faq">FAQ</a><div class="pill"><span class="dot"></span> Demo interface</div></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Your play space, anywhere</div>
+        <h1>Gaming in the<br><span>cloud.</span> Your way.</h1>
+        <p class="lead">A personal cloud-gaming portal concept designed for Roblox, with controller and keyboard-and-mouse setup options in one clean place.</p>
+        <div class="actions"><button class="btn btn-primary" id="launch">▶ &nbsp; Check play setup</button><button class="btn btn-quiet" id="learn">Explore features ↓</button></div>
+        <p class="fine">This is a front-end prototype. A real playable session needs a cloud PC/streaming backend and a supported Roblox installation.</p>
+      </div>
+      <div class="preview" aria-label="Illustration of a cloud gaming dashboard">
+        <div class="screen">
+          <div class="screen-top"><span class="screen-tag">CLOUD SESSION</span><span class="screen-tag">● READY TO CONFIGURE</span></div>
+          <div class="game-art"><div class="game-cube"><svg viewBox="0 0 64 64" fill="none"><path d="M11 20 32 9l21 11v24L32 55 11 44V20Z" stroke="white" stroke-width="3"/><path d="M11 20l21 12 21-12M32 32v23" stroke="white" stroke-width="3"/></svg></div></div>
+          <div class="screen-bottom"><span class="screen-tag">LOW-LATENCY DESIGN</span><span class="screen-tag">INPUT READY</span></div>
+        </div>
+        <div class="preview-bottom"><div><div class="preview-title">Your cloud gaming hub</div><div class="preview-sub">One place for your play settings</div></div><span class="tag">PERSONAL PORTAL</span></div>
+      </div>
+    </section>
+    <section class="stats" aria-label="Portal features">
+      <div class="stat"><strong>🎮 Controller</strong><span>Choose gamepad input</span></div>
+      <div class="stat"><strong>⌨️ Keyboard + mouse</strong><span>Choose desktop controls</span></div>
+      <div class="stat"><strong>☁️ Cloud-ready</strong><span>Connect a real provider later</span></div>
+    </section>
+    <section id="setup">
+      <div class="section-head"><div class="eyebrow">Personalise your session</div><h2>How do you want to play?</h2><p>Select your preferred controls. This setting is only a demo until a cloud streaming service is connected.</p></div>
+      <div class="setup-grid">
+        <div class="panel">
+          <h3>Choose your input</h3><p>Pick the controls you plan to use for your cloud session.</p>
+          <div class="option-row" role="group" aria-label="Input method">
+            <button class="option active" data-input="controller" aria-pressed="true"><span class="emoji">🎮</span><b>Controller</b><small>Gamepad input</small></button>
+            <button class="option" data-input="keyboard" aria-pressed="false"><span class="emoji">⌨️</span><b>Keyboard + mouse</b><small>Desktop input</small></button>
+          </div>
+          <div class="status-line"><div class="status-icon">✓</div><div><b id="input-title">Controller selected</b><span id="input-desc">Use a compatible controller with the cloud gaming provider you choose.</span></div></div>
+        </div>
+        <div class="panel" id="how">
+          <h3>Connection status</h3><p>Before playing, a real cloud computer and streaming connection must be configured.</p>
+          <div class="status-line"><div class="status-icon">1</div><div><b>Cloud PC provider</b><span>Not connected — choose a legitimate service or configure your own remote gaming PC.</span></div></div>
+          <div class="status-line"><div class="status-icon">2</div><div><b>Roblox session</b><span>Not started — sign in through the official Roblox app/site on the remote machine.</span></div></div>
+          <div class="status-line"><div class="status-icon">3</div><div><b>Browser streaming</b><span>Not configured — requires a supported streaming technology and server.</span></div></div>
+        </div>
+      </div>
+      <div class="note"><strong>Important:</strong> This prototype cannot launch Roblox or provide unlimited play time by itself. Cloud gaming uses real computing resources, so a truly unlimited service is not guaranteed to be free. Use official Roblox access and check the cloud provider’s terms.</div>
+    </section>
+
+
+    <section class="pair-section" id="mobile-controller">
+      <div class="section-head"><div class="eyebrow">Phone + TV companion</div><h2>Mobile Controller</h2><p>Pair your phone with the B7 Arcade Gaming TV page using a code or QR scan. This is the pairing-interface prototype; live control syncing needs a secure realtime connection service.</p></div>
+      <div class="pair-grid">
+        <div class="panel">
+          <h3>📺 TV screen — create a pairing code</h3>
+          <p>Open B7 Arcade Gaming on the TV, then generate a temporary code for the phone to enter.</p>
+          <button class="btn btn-primary" id="make-pair">Generate pairing code</button>
+          <div class="pair-code" id="pair-code">——— ———</div>
+          <div class="qr-wrap"><img id="pair-qr" alt="Pairing QR code will appear here" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Ctext x='50%25' y='48%25' text-anchor='middle' font-size='12' fill='%23333'%3EGenerate code%3C/text%3E%3Ctext x='50%25' y='60%25' text-anchor='middle' font-size='10' fill='%23666'%3Eto create QR%3C/text%3E%3C/svg%3E"><div id="qr-hint" class="fine" style="color:#555;text-align:center">QR appears when hosted online</div></div>
+          <div class="status-line"><div class="status-icon">i</div><div><b id="pair-status">Not paired</b><span id="pair-status-detail">Generate a code to preview the pairing flow. This page alone does not send controls between devices.</span></div></div>
+        </div>
+        <div class="panel">
+          <h3>📱 Phone screen — join a TV</h3>
+          <p>Enter the code shown on the TV. The controller buttons below are for layout preview only until realtime pairing is implemented.</p>
+          <label for="join-code" class="fine">TV pairing code</label>
+          <input class="pair-input" id="join-code" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code">
+          <button class="btn btn-quiet" id="join-pair">Join TV</button>
+          <div class="controller-pad" aria-label="Mobile controller preview">
+            <div class="dpad">
+              <span></span><button class="pad-btn" data-control="UP" aria-label="Up">▲</button><span></span>
+              <button class="pad-btn" data-control="LEFT" aria-label="Left">◀</button><button class="pad-btn" data-control="CENTER" aria-label="Center">●</button><button class="pad-btn" data-control="RIGHT" aria-label="Right">▶</button>
+              <span></span><button class="pad-btn" data-control="DOWN" aria-label="Down">▼</button><span></span>
+            </div>
+            <div class="action-pad"><button class="pad-btn" data-control="Y">Y</button><button class="pad-btn" data-control="B">B</button><button class="pad-btn" data-control="X">X</button><button class="pad-btn" data-control="A">A</button></div>
+          </div>
+          <div class="fine" id="control-feedback" style="text-align:center;margin-top:14px">Controller preview — not sending live game input yet.</div>
+        </div>
+      </div>
+      <div class="note"><strong>Compatibility note:</strong> A QR code can open the phone page, but QR/code alone cannot connect two devices. Real cross-device control needs a secure realtime backend or WebRTC signaling, plus a game/streaming service that accepts controller input. This prototype does not control Roblox or the TV yet.</div>
+    </section>
+
+    <section class="store-section" id="store">
+      <div class="section-head">
+        <div class="eyebrow">Your game library</div>
+        <h2>B7 Arcade Gaming Store</h2>
+        <p>Browse games and add them to your personal website library. Search, filter, and choose your preferred controls.</p>
+      </div>
+      <div class="store-toolbar">
+        <input id="game-search" class="store-search" type="search" placeholder="Search games…" aria-label="Search games">
+        <div class="store-filters" role="group" aria-label="Filter games">
+          <button class="filter-btn active" data-filter="all">All games</button>
+          <button class="filter-btn" data-filter="shooter">Shooter</button>
+          <button class="filter-btn" data-filter="sandbox">Sandbox</button>
+          <button class="filter-btn" data-filter="racing">Racing</button>
+        </div>
+      </div>
+      <div class="game-grid" id="game-grid">
+        <article class="game-card" data-name="Roblox" data-category="sandbox">
+          <div class="game-cover cover-roblox"><span class="game-emoji">◇</span><span class="game-type">SOCIAL · VARIETY</span></div>
+          <div class="game-info"><h3>Roblox</h3><p>Explore millions of community-made experiences.</p><div class="game-meta"><span>🎮 Controller varies</span><span>⌨️ Keyboard/mouse</span></div><div class="game-actions"><button class="btn btn-primary add-game">＋ Add to library</button><button class="btn btn-quiet game-check">Options</button></div></div>
+        </article>
+        <article class="game-card" data-name="Minecraft" data-category="sandbox">
+          <div class="game-cover cover-minecraft"><span class="game-emoji">🟩</span><span class="game-type">SANDBOX</span></div>
+          <div class="game-info"><h3>Minecraft</h3><p>Build, explore, and create in a blocky world.</p><div class="game-meta"><span>🎮 Depends on version</span><span>⌨️ PC version</span></div><div class="game-actions"><button class="btn btn-primary add-game">＋ Add to library</button><button class="btn btn-quiet game-check">Options</button></div></div>
+        </article>
+        <article class="game-card" data-name="Free Fire" data-category="shooter">
+          <div class="game-cover cover-freefire"><span class="game-emoji">🔥</span><span class="game-type">BATTLE ROYALE</span></div>
+          <div class="game-info"><h3>Free Fire</h3><p>Fast-paced mobile battle royale. Keyboard mapping depends on the supported platform.</p><div class="game-meta"><span>⌨️ Platform-dependent</span><span>🎮 Check compatibility</span></div><div class="game-actions"><button class="btn btn-primary add-game">＋ Add to library</button><button class="btn btn-quiet game-check">Options</button></div></div>
+        </article>
+        <article class="game-card" data-name="Call of Duty COD" data-category="shooter">
+          <div class="game-cover cover-cod"><span class="game-emoji">🎯</span><span class="game-type">ACTION · FPS</span></div>
+          <div class="game-info"><h3>Call of Duty</h3><p>Choose a specific COD title; device and input support differ by edition.</p><div class="game-meta"><span>⌨️ PC editions vary</span><span>🎮 Depends on title</span></div><div class="game-actions"><button class="btn btn-primary add-game">＋ Add to library</button><button class="btn btn-quiet game-check">Options</button></div></div>
+        </article>
+        <article class="game-card" data-name="Fortnite" data-category="shooter">
+          <div class="game-cover cover-fortnite"><span class="game-emoji">⚡</span><span class="game-type">BATTLE ROYALE</span></div>
+          <div class="game-info"><h3>Fortnite</h3><p>Battle royale and creative experiences where supported.</p><div class="game-meta"><span>🎮 Check service</span><span>⌨️ Check service</span></div><div class="game-actions"><button class="btn btn-primary add-game">＋ Add to library</button><button class="btn btn-quiet game-check">Options</button></div></div>
+        </article>
+        <article class="game-card" data-name="CarX Street" data-category="racing">
+          <div class="game-cover cover-carx"><span class="game-emoji">🏎️</span><span class="game-type">OPEN-WORLD RACING</span></div>
+          <div class="game-info"><h3>CarX Street</h3><p>Explore roads and race; supported devices and controls vary.</p><div class="game-meta"><span>🎮 Check compatibility</span><span>⌨️ Check compatibility</span></div><div class="game-actions"><button class="btn btn-primary add-game">＋ Add to library</button><button class="btn btn-quiet game-check">Options</button></div></div>
+        </article>
+      </div>
+      <div class="empty-state" id="empty-games">No games match that search. Try another title or category.</div>
+      <div class="store-notice"><strong>Important:</strong> This is a game catalogue for your B7 Arcade Gaming website, not a real app store. “Add to library” saves a game card in this browser only; it does not install, buy, or stream the game. Each title needs a legitimate compatible app or cloud-streaming service. LG webOS may not support the required service, and this page cannot bypass that restriction.</div>
+    </section>
+
+    <section class="faq" id="faq">
+      <div class="section-head"><div class="eyebrow">Before you build</div><h2>Quick answers</h2></div>
+      <details><summary>Can this website play Roblox right now?</summary><p>Not yet. It is a working interface demo, not a cloud computer. To make it playable, you need a remote machine that can run Roblox, a compatible streaming server, and a browser client that carries video, audio, keyboard, mouse, and controller input.</p></details>
+      <details><summary>Can it be unlimited and free?</summary><p>Not reliably. Running a cloud PC costs compute, bandwidth, storage, and electricity. Free plans often have limits. Avoid services promising unlimited play without clear terms, and never share your Roblox password with an unknown provider.</p></details>
+      <details><summary>Will a controller and keyboard/mouse both work?</summary><p>The site can offer both settings. Actual support depends on the streaming software, browser, device, and remote operating system. A controller may need browser gamepad support and proper forwarding to the remote PC.</p></details>
+      <details><summary>What is the next step to make it real?</summary><p>Choose a legitimate cloud PC or remote-computer provider first. Then check whether it supports Roblox, browser streaming, and input forwarding. Only after that should the site’s “Connect” action be wired to the provider’s supported connection flow.</p></details>
+    </section>
+  </main>
+  <footer><span>B7 Arcade Gaming · Personal cloud gaming portal concept</span><span>Independent demo · Not affiliated with Roblox Corporation</span></footer>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const toast = document.getElementById('toast');
+let toastTimer;
+function notify(message) {
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3400);
+}
+document.querySelectorAll('[data-input]').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('[data-input]').forEach(item => {
+      const selected = item === button;
+      item.classList.toggle('active', selected);
+      item.setAttribute('aria-pressed', String(selected));
+    });
+    if (button.dataset.input === 'controller') {
+      document.getElementById('input-title').textContent = 'Controller selected';
+      document.getElementById('input-desc').textContent = 'Use a compatible controller with the cloud gaming provider you choose.';
+    } else {
+      document.getElementById('input-title').textContent = 'Keyboard + mouse selected';
+      document.getElementById('input-desc').textContent = 'Use your keyboard and mouse; the provider must forward both to the remote PC.';
+    }
+  });
+});
+document.getElementById('launch').addEventListener('click', () => notify('No cloud provider is connected yet. This demo cannot start a Roblox session.'));
+document.getElementById('learn').addEventListener('click', () => document.getElementById('store').scrollIntoView({behavior:'smooth'}));
+
+
+// Pairing UI prototype: generates a six-digit code and a QR link. This does not
+// establish a live device connection; a realtime signaling/backend service is required.
+let activePairCode = '';
+const pairCodeEl = document.getElementById('pair-code');
+const pairQrEl = document.getElementById('pair-qr');
+const pairStatus = document.getElementById('pair-status');
+const pairStatusDetail = document.getElementById('pair-status-detail');
+document.getElementById('make-pair').addEventListener('click', () => {
+  activePairCode = String(Math.floor(100000 + Math.random() * 900000));
+  pairCodeEl.textContent = activePairCode;
+  const base = window.location.href.split('?')[0].split('#')[0];
+  const joinUrl = base + '?controller=' + activePairCode + '#mobile-controller';
+  pairQrEl.src = 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=' + encodeURIComponent(joinUrl);
+  document.getElementById('qr-hint').textContent = 'Scan to open the controller page';
+  pairStatus.textContent = 'Code created — demo only';
+  pairStatusDetail.textContent = 'Share this code or QR. Live TV pairing is not connected until a realtime backend is added.';
+  document.getElementById('join-code').value = activePairCode;
+  notify('Pairing code created. Live device syncing is not enabled yet.');
+});
+document.getElementById('join-pair').addEventListener('click', () => {
+  const code = document.getElementById('join-code').value.trim();
+  if (!/^\d{6}$/.test(code)) { notify('Enter a 6-digit pairing code.'); return; }
+  document.getElementById('control-feedback').textContent = 'Code ' + code + ' entered. Demo only — no live connection to the TV yet.';
+  notify('Pairing screen preview opened. Live connection needs a backend.');
+});
+document.querySelectorAll('[data-control]').forEach(button => button.addEventListener('click', () => {
+  document.getElementById('control-feedback').textContent = 'Button ' + button.dataset.control + ' pressed — preview only, not sent to the TV.';
+}));
+const params = new URLSearchParams(window.location.search);
+if (params.get('controller')) {
+  document.getElementById('join-code').value = params.get('controller').replace(/\D/g,'').slice(0,6);
+  setTimeout(() => document.getElementById('mobile-controller').scrollIntoView({behavior:'smooth'}), 250);
+}
+
+const gameSearch = document.getElementById('game-search');
+const gameCards = [...document.querySelectorAll('.game-card')];
+let activeGameFilter = 'all';
+function filterGames() {
+  const query = gameSearch.value.trim().toLowerCase();
+  let visible = 0;
+  gameCards.forEach(card => {
+    const matchesText = card.dataset.name.toLowerCase().includes(query);
+    const matchesCategory = activeGameFilter === 'all' || card.dataset.category === activeGameFilter;
+    card.style.display = matchesText && matchesCategory ? '' : 'none';
+    if (matchesText && matchesCategory) visible++;
+  });
+  document.getElementById('empty-games').style.display = visible ? 'none' : 'block';
+}
+gameSearch.addEventListener('input', filterGames);
+document.querySelectorAll('[data-filter]').forEach(button => {
+  button.addEventListener('click', () => {
+    activeGameFilter = button.dataset.filter;
+    document.querySelectorAll('[data-filter]').forEach(item => item.classList.toggle('active', item === button));
+    filterGames();
+  });
+});
+gameCards.forEach(card => {
+  const addButton = card.querySelector('.add-game');
+  addButton.addEventListener('click', () => {
+    const added = addButton.dataset.added === 'true';
+    addButton.dataset.added = String(!added);
+    addButton.textContent = added ? '＋ Add to library' : '✓ Added to library';
+    addButton.classList.toggle('btn-added', !added);
+    notify(added ? card.dataset.name + ' removed from this browser library.' : card.dataset.name + ' added to this browser library. This does not install or launch the game.');
+  });
+  card.querySelector('.game-check').addEventListener('click', () => {
+    notify(card.dataset.name + ': check for a compatible official app or cloud service before paying. This website cannot launch it yet.');
+  });
+});
+
+</script>
+</body>
+</html>
